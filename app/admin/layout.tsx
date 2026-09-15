@@ -1,11 +1,29 @@
 import Link from 'next/link';
+import { createClient } from '@/lib/supabase/server';
 import { ThemeToggle } from '@/components/public/ThemeToggle';
-import { Feather, BookOpen, MessageSquare, LayoutDashboard, PlusCircle, Globe, LogOut } from 'lucide-react';
+import { Feather, MessageSquare, LayoutDashboard, PlusCircle, Globe } from 'lucide-react';
+import { LogoutButton } from '@/components/admin/LogoutButton';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // If unauthenticated (e.g. on /admin/login), render clean view without the studio sidebar
+  if (!user) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center bg-[var(--paper-bg)] text-[var(--paper-ink)]">
+        <div className="absolute top-6 right-6">
+          <ThemeToggle />
+        </div>
+        {children}
+      </div>
+    );
+  }
+
+  // Authenticated Author Studio
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[var(--paper-bg)] text-[var(--paper-ink)]">
-      {/* Sidebar */}
+      {/* Sidebar - only visible to logged-in author */}
       <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[var(--paper-border)] bg-[var(--paper-card)]/60 flex flex-col justify-between shrink-0">
         <div>
           {/* Admin Brand */}
@@ -57,7 +75,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </nav>
         </div>
 
-        {/* Studio Footer */}
+        {/* Studio Footer with Logout */}
         <div className="p-4 border-t border-[var(--paper-border)] space-y-2 text-xs font-sans text-[var(--paper-ink-muted)]">
           <Link
             href="/"
@@ -67,6 +85,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Globe className="w-3.5 h-3.5" />
             <span>View Public Site</span>
           </Link>
+          <LogoutButton />
         </div>
       </aside>
 
