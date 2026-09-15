@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  /* LIGHT PAPER THEME */
+  --paper-bg: #FAF7F2;          /* Warm eggshell archival paper */
+  --paper-card: #FFFFFF;        /* Crisp card surface */
+  --paper-muted: #F2ECE1;       /* Subtle warm parchment tint */
+  --paper-border: #E8E1D5;      /* Delicately pressed paper rule */
+  --paper-ink: #23211F;         /* Deep rich soot ink */
+  --paper-ink-muted: #736C63;   /* Soft pencil graphite */
+  --paper-accent: #8C4820;      /* Vintage burnt sienna */
+  --paper-accent-soft: #F5EAE1; /* Soft wash */
+  --paper-selection: #EADBCE;   /* Antique paper highlight */
+
+  --background: var(--paper-bg);
+  --foreground: var(--paper-ink);
+}
+
+[data-theme="dark"],
+.dark {
+  /* DARK PAPER THEME */
+  --paper-bg: #141312;          /* Charcoal slate inkstone */
+  --paper-card: #1D1C1A;        /* Deep nocturnal paper */
+  --paper-muted: #282623;       /* Muted slate wash */
+  --paper-border: #33302C;      /* Quiet graphite edge */
+  --paper-ink: #EDE7DD;         /* Creamy bone parchment text */
+  --paper-ink-muted: #A39B8F;   /* Moonlit dust */
+  --paper-accent: #E0A96D;      /* Warm golden candleflame */
+  --paper-accent-soft: #2B241C; /* Dark amber wash */
+  --paper-selection: #3D352B;   /* Deep amber highlight */
+
+  --background: var(--paper-bg);
+  --foreground: var(--paper-ink);
+}
+
+/* Base Body Styles */
+body {
+  background-color: var(--paper-bg);
+  color: var(--paper-ink);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--paper-selection);
+  color: var(--paper-ink);
+}
+
+/* Subtle tactile paper texture grain */
+.paper-texture {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+[data-theme="dark"] .paper-texture,
+.dark .paper-texture {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Literary Poetry Typography Rules */
+.poem-stanza {
+  margin-bottom: 2rem;
+  line-height: 2.1;
+  letter-spacing: 0.015em;
+  font-feature-settings: "liga" 1, "kern" 1;
+}
+
+.poem-stanza p {
+  margin: 0;
+  white-space: normal;
+}
+
+/* Drop caps for stories */
+.story-dropcap::first-letter {
+  float: left;
+  font-size: 3.8rem;
+  line-height: 0.82;
+  padding-top: 4px;
+  padding-right: 12px;
+  padding-bottom: 2px;
+  font-family: var(--font-cormorant), Georgia, serif;
+  color: var(--paper-accent);
+}
+
+/* Smooth reading column */
+.reader-container {
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+}
