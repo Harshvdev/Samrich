@@ -91,3 +91,13 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* Page Navigation Progress Bar */
+#nprogress .bar {
+  background: var(--paper-accent) !important;
+  height: 3px !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--paper-accent), 0 0 5px var(--paper-accent) !important;
+}

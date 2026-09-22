@@ -203,13 +203,31 @@ export function PostEditorForm({ initialData }: PostEditorFormProps) {
           <span>Accompaniment Video / Reading (YouTube)</span>
         </div>
         
-        <input
-          type="text"
-          value={youtubeUrl}
-          onChange={(e) => setYoutubeUrl(e.target.value)}
-          placeholder="Paste YouTube Video URL (e.g. https://www.youtube.com/watch?v=...)"
-          className="w-full px-3.5 py-2 rounded-lg border border-[var(--paper-border)] bg-[var(--paper-bg)] text-[var(--paper-ink)] focus:outline-hidden focus:border-[var(--paper-accent)] text-xs font-mono"
-        />
+        <div className="relative">
+          <input
+            type="text"
+            value={youtubeUrl}
+            onChange={(e) => setYoutubeUrl(e.target.value)}
+            placeholder="Paste YouTube Video URL or ID (e.g. https://www.youtube.com/watch?v=...)"
+            className="w-full px-3.5 py-2 pr-8 rounded-lg border border-[var(--paper-border)] bg-[var(--paper-bg)] text-[var(--paper-ink)] focus:outline-hidden focus:border-[var(--paper-accent)] text-xs font-mono"
+          />
+          {youtubeUrl && (
+            <button
+              type="button"
+              onClick={() => setYoutubeUrl('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--paper-ink-muted)] hover:text-[var(--paper-ink)] text-xs"
+              title="Clear"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
+        {youtubeUrl.trim() && !previewVideoId && (
+          <p className="text-[11px] text-amber-600 dark:text-amber-400">
+            Please enter a valid YouTube video link (e.g. https://www.youtube.com/watch?v=..., youtu.be/..., shorts, live, or embed code).
+          </p>
+        )}
 
         {previewVideoId && (
           <div className="flex items-center space-x-4 p-3 rounded-lg border border-[var(--paper-border)] bg-[var(--paper-card)]">

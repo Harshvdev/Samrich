@@ -111,6 +111,16 @@ const FALLBACK_POSTS: Post[] = [
   }
 ];
 
+function normalizePost(post: any): Post {
+  if (!post) return post;
+  const videos = post.videos || post.post_videos || [];
+  return {
+    ...post,
+    videos,
+    post_videos: videos,
+  };
+}
+
 export async function getPublishedPosts(type?: 'poem' | 'story'): Promise<Post[]> {
   try {
     const supabase = await createClient();
@@ -126,11 +136,13 @@ export async function getPublishedPosts(type?: 'poem' | 'story'): Promise<Post[]
 
     const { data, error } = await query;
     if (error || !data || data.length === 0) {
-      return type ? FALLBACK_POSTS.filter(p => p.type === type) : FALLBACK_POSTS;
+      const fallbacks = type ? FALLBACK_POSTS.filter(p => p.type === type) : FALLBACK_POSTS;
+      return fallbacks.map(normalizePost);
     }
-    return data as Post[];
+    return (data as any[]).map(normalizePost);
   } catch {
-    return type ? FALLBACK_POSTS.filter(p => p.type === type) : FALLBACK_POSTS;
+    const fallbacks = type ? FALLBACK_POSTS.filter(p => p.type === type) : FALLBACK_POSTS;
+    return fallbacks.map(normalizePost);
   }
 }
 
@@ -145,12 +157,12 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
     if (error || !data) {
       const fallback = FALLBACK_POSTS.find(p => p.slug === slug);
-      return fallback || null;
+      return fallback ? normalizePost(fallback) : null;
     }
-    return data as Post;
+    return normalizePost(data);
   } catch {
     const fallback = FALLBACK_POSTS.find(p => p.slug === slug);
-    return fallback || null;
+    return fallback ? normalizePost(fallback) : null;
   }
 }
 

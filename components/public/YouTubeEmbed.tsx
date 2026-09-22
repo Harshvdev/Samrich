@@ -33,19 +33,19 @@ export function YouTubeEmbed({ videoId, title, autoplayOnClick = true }: YouTube
       ) : (
         <div
           onClick={() => setIsPlaying(true)}
-          className="group relative w-full aspect-video cursor-pointer overflow-hidden bg-black/5 flex items-center justify-center"
+          className="group relative w-full aspect-video cursor-pointer overflow-hidden bg-black/5 rounded-lg"
         >
           {/* Thumbnail image */}
           <img
             src={getYouTubeThumbnail(videoId)}
             alt={title || 'Watch poetry reading'}
-            className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+            className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-black/25 group-hover:bg-black/35 transition-colors" />
 
-          {/* Tactile play trigger */}
-          <div className="relative z-10 w-14 h-14 rounded-full bg-[var(--paper-card)]/90 text-[var(--paper-ink)] shadow-md flex items-center justify-center group-hover:scale-110 group-hover:bg-[var(--paper-accent)] group-hover:text-white transition-all duration-300">
+          {/* Tactile play trigger centered */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-14 h-14 rounded-full bg-[var(--paper-card)]/90 text-[var(--paper-ink)] shadow-md flex items-center justify-center group-hover:scale-110 group-hover:bg-[var(--paper-accent)] group-hover:text-white transition-all duration-300">
             <Play className="w-6 h-6 ml-0.5 fill-current" />
           </div>
 

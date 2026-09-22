@@ -124,17 +124,23 @@ export default async function PoemReaderPage({ params }: Props) {
           </div>
 
           {/* OPTIONAL YOUTUBE EMBED */}
-          {post.videos && post.videos.length > 0 && (
-            <div className="my-12">
-              <span className="block text-xs uppercase tracking-widest text-[var(--paper-accent)] font-sans font-medium mb-2">
-                Recorded Reading
-              </span>
-              <YouTubeEmbed
-                videoId={post.videos[0].youtube_video_id}
-                title={post.videos[0].title || post.title}
-              />
-            </div>
-          )}
+          {(() => {
+            const videoList = post.videos || (post as any).post_videos || [];
+            if (videoList.length > 0 && videoList[0]?.youtube_video_id) {
+              return (
+                <div className="my-12">
+                  <span className="block text-xs uppercase tracking-widest text-[var(--paper-accent)] font-sans font-medium mb-2">
+                    Recorded Reading
+                  </span>
+                  <YouTubeEmbed
+                    videoId={videoList[0].youtube_video_id}
+                    title={videoList[0].title || post.title}
+                  />
+                </div>
+              );
+            }
+            return null;
+          })()}
 
           {/* INTERACTION BAR (LIKE) */}
           <div className="py-6 border-y border-[var(--paper-border)] flex items-center justify-between">

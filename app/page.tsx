@@ -139,25 +139,31 @@ export default async function HomePage() {
         </section>
 
         {/* READING SHOWCASE (YOUTUBE INTEGRATION) */}
-        {allPosts.some(p => p.videos && p.videos.length > 0) && (
-          <section className="py-20 px-6 max-w-4xl mx-auto text-center border-t border-[var(--paper-border)]">
-            <span className="text-xs uppercase tracking-widest text-[var(--paper-accent)] font-sans font-medium">
-              Audio & Visual Reading
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[var(--paper-ink)] mt-2 mb-4">
-              Performance & Recorded Verses
-            </h2>
-            <p className="text-sm font-serif text-[var(--paper-ink-muted)] max-w-lg mx-auto mb-8 italic">
-              Listen to the author read selections aloud.
-            </p>
-            {allPosts.find(p => p.videos && p.videos.length > 0)?.videos?.[0] && (
+        {(() => {
+          const featuredPostWithVideo = allPosts.find(p => {
+            const v = p.videos || (p as any).post_videos;
+            return v && v.length > 0 && v[0]?.youtube_video_id;
+          });
+          if (!featuredPostWithVideo) return null;
+          const video = (featuredPostWithVideo.videos || (featuredPostWithVideo as any).post_videos)[0];
+          return (
+            <section className="py-20 px-6 max-w-4xl mx-auto text-center border-t border-[var(--paper-border)]">
+              <span className="text-xs uppercase tracking-widest text-[var(--paper-accent)] font-sans font-medium">
+                Audio & Visual Reading
+              </span>
+              <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[var(--paper-ink)] mt-2 mb-4">
+                Performance & Recorded Verses
+              </h2>
+              <p className="text-sm font-serif text-[var(--paper-ink-muted)] max-w-lg mx-auto mb-8 italic">
+                Listen to the author read selections aloud.
+              </p>
               <YouTubeEmbed
-                videoId={allPosts.find(p => p.videos && p.videos.length > 0)!.videos![0].youtube_video_id}
-                title={allPosts.find(p => p.videos && p.videos.length > 0)!.videos![0].title}
+                videoId={video.youtube_video_id}
+                title={video.title || featuredPostWithVideo.title}
               />
-            )}
-          </section>
-        )}
+            </section>
+          );
+        })()}
       </main>
 
       <Footer />

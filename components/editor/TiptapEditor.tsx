@@ -6,6 +6,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Youtube from '@tiptap/extension-youtube';
 import { Bold, Italic, List, Heading2, Quote, Undo, Redo, Video, AlignLeft } from 'lucide-react';
 import { useEffect } from 'react';
+import { extractYouTubeId } from '@/lib/youtube';
 
 interface TiptapEditorProps {
   content: string;
@@ -43,6 +44,22 @@ export function TiptapEditor({ content, onChange, type }: TiptapEditorProps) {
           isPoem ? 'poem-stanza-editor space-y-4' : 'space-y-4'
         }`,
       },
+      handlePaste: (view, event) => {
+        const text = event.clipboardData?.getData('text/plain')?.trim();
+        if (text) {
+          const videoId = extractYouTubeId(text);
+          if (videoId && view.state.schema.nodes.youtube) {
+            event.preventDefault();
+            const node = view.state.schema.nodes.youtube.create({
+              src: `https://www.youtube.com/watch?v=${videoId}`,
+            });
+            const tr = view.state.tr.replaceSelectionWith(node);
+            view.dispatch(tr);
+            return true;
+          }
+        }
+        return false;
+      },
     },
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML(), editor.getJSON());
@@ -64,9 +81,16 @@ export function TiptapEditor({ content, onChange, type }: TiptapEditorProps) {
   }
 
   const addYouTubeVideo = () => {
-    const url = prompt('Enter YouTube Video URL:');
+    const url = prompt('Enter YouTube Video URL or Video ID:');
     if (url) {
-      editor.commands.setYoutubeVideo({ src: url });
+      const videoId = extractYouTubeId(url);
+      if (videoId) {
+        editor.commands.setYoutubeVideo({
+          src: `https://www.youtube.com/watch?v=${videoId}`,
+        });
+      } else {
+        alert('Invalid YouTube URL or Video ID.');
+      }
     }
   };
 

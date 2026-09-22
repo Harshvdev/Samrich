@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Cormorant_Garamond, Newsreader, Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import NextTopLoader from 'nextjs-toploader';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -63,6 +64,19 @@ export default function RootLayout({
       className={`${cormorant.variable} ${newsreader.variable} ${inter.variable}`}
     >
       <body className="paper-texture min-h-screen flex flex-col font-sans selection:bg-[var(--paper-selection)]">
+        <NextTopLoader
+          color="#8C4820"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px var(--paper-accent),0 0 5px var(--paper-accent)"
+          zIndex={1600}
+          showAtBottom={false}
+        />
         <ThemeProvider>
           {children}
         </ThemeProvider>
